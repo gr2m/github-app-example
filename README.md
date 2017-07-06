@@ -107,7 +107,7 @@ In order to secure our server we can set a secret that only our GitHub app and o
 On your Glitch app, open the `.env` file. This is where we can put secrets without others having access to it. Remove all the content and replice it with the line below (make sure to replace `yoursecrethere` with your own secret)
 
 ```
-WEBHOOK_SECRET=yoursecrethere
+SECRET=yoursecrethere
 ```
 
 This secret is used by GitHub to calculate a signature which your server can use for verification. This is not overly complex, but we will use a library for it: [github-webhook-handler](https://github.com/rvagg/github-webhook-handler). Besides, the library makes it simpler to handle hook events, as you will see in a moment.
@@ -118,7 +118,7 @@ Now open the `server.js` file and change its content
 
 ```js
 // values for the enviroment variables set in the .env file can be accesed at proces.env.VARIABLE_NAME
-const secret = process.env.WEBHOOK_SECRET
+const secret = process.env.SECRET
 
 const http = require('http')
 const webHookHandler = require('github-webhook-handler')({
@@ -149,7 +149,7 @@ Create another comment on the repository you activated your GitHub app for. You 
 Received issue event for "…"
 ```
 
-If something doesn’t work as expected, compare it to our [github-webhook-handler-example](https://glitch.com/edit/#!/github-webhook-handler-example). Click on "Remix this" to use it as a template for your own app. Make sure to change the **Webhook URL** in your GitHub App settings to the URL of the new Glitch app and to add the `WEBHOOK_SECRET=` to your new app’s `.env` file.
+If something doesn’t work as expected, compare it to our [github-webhook-handler-example](https://glitch.com/edit/#!/github-webhook-handler-example). Click on "Remix this" to use it as a template for your own app. Make sure to change the **Webhook URL** in your GitHub App settings to the URL of the new Glitch app and to add the `SECRET=` to your new app’s `.env` file.
 
 ## Commenting with your GitHub App
 
@@ -183,7 +183,7 @@ Now open the `server.js` file and change its content
 const http = require('http')
 const webHookHandler = require('github-webhook-handler')({
   path: '/',
-  secret: process.env.WEBHOOK_SECRET
+  secret: process.env.SECRET
 })
 const app = require('github-app')({
   id: process.env.APP_ID,
@@ -215,7 +215,7 @@ function handleRequest (request, response) {
 
 Create another comment on your test repository. Welcome to the robot uprising 🤖
 
-If something doesn’t work as expected, compare it to our [github-app-example](https://glitch.com/edit/#!/github-app-example). Click on "Remix this" to use it as a template for your own app. Make sure to change the **Webhook URL** in your GitHub App settings to the URL of the new Glitch app and to add `WEBHOOK_SECRET=` & `APP_ID` to your new app’s `.env` file. You also need to create the `.data/private-key.pem` file as described above.
+If something doesn’t work as expected, compare it to our [github-app-example](https://glitch.com/edit/#!/github-app-example). Click on "Remix this" to use it as a template for your own app. Make sure to change the **Webhook URL** in your GitHub App settings to the URL of the new Glitch app and to add `SECRET=` & `APP_ID` to your new app’s `.env` file. You also need to create the `.data/private-key.pem` file as described above.
 
 ## Bonus: Probot!
 
@@ -240,7 +240,7 @@ function handleIssue (robot, context) {
 }
 ```
 
-Isn’t that cool? Make sure to create the `.data/private-key.pem` file as described above and update the `.env` file (replace values for `WEBHOOK_SECRET` and `APP_ID`)
+Isn’t that cool? Make sure to create the `.data/private-key.pem` file as described above and update the `.env` file (replace values for `SECRET` and `APP_ID`)
 
 ```
 # you need to set NODE_ENV=production, otherwise probot will try to start localtunnel
@@ -248,7 +248,7 @@ NODE_ENV=production
 # By default, proobot is looking for the file at /private-key.pem. We need to set it to our custom location
 PRIVATE_KEY_PATH=.data/private-key.pem
 
-WEBHOOK_SECRET=yoursecrethere
+SECRET=yoursecrethere
 APP_ID=123
 ```
 
